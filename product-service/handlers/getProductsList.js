@@ -10,7 +10,7 @@ export default function getProductsList() {
     } else {
       reject({
         statusCode: 400,
-        body: JSON.stringify(errorMessage)
+        body: 'Bad Request'
       });
     }
   });

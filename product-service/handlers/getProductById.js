@@ -12,7 +12,7 @@ export default function getProductById(id) {
     } else {
       reject({
         statusCode: 400,
-        body: JSON.stringify(errorMessage)
+        body: 'Bad Request'
       });
     }
   });
