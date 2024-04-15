@@ -5,6 +5,7 @@ import productsListDb from './handlers/getProductsListDb';
 import productById from './handlers/getProductById';
 import productByIdDb from './handlers/getProductByIdDb';
 import postProductDb from './handlers/postProduct';
+import createProduct from './handlers/postProduct';
 
 const AWS = require('aws-sdk');
 const { REGION, SNS_ARN } = process.env;
