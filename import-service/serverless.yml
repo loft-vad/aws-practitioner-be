@@ -27,6 +27,15 @@ provider:
             - "s3:*"
           Resource:
             - "arn:aws:s3:::${env:BUCKET}/*"
+        - Effect: Allow
+          Action:
+            - "sqs:*"
+          Resource:
+            - ${param:SQSQueueArn}
+
+  environment:
+    SQS_URL: ${param:SQSUrl}
+    SQS_ARN: ${param:SQSQueueArn}
 
 functions:
   importProductsFile:
@@ -39,6 +48,7 @@ functions:
             parameters:
               querystrings:
                 name: true
+          cors: true
   importFileParser:
     handler: handlers.importFileParser
     events:
