@@ -1,0 +1,50 @@
+service: import-service
+
+frameworkVersion: "3"
+
+plugins:
+  - serverless-webpack
+  - serverless-auto-swagger
+  - serverless-dotenv-plugin
+
+useDotenv: true
+
+provider:
+  name: aws
+  runtime: nodejs18.x
+  stage: dev
+  region: ${env:REGION}
+
+  iam:
+    role:
+      statements:
+        - Effect: Allow
+          Action: "s3:ListBucket"
+          Resource:
+            - "arn:aws:s3:::${env:BUCKET}"
+        - Effect: Allow
+          Action:
+            - "s3:*"
+          Resource:
+            - "arn:aws:s3:::${env:BUCKET}/*"
+
+functions:
+  importProductsFile:
+    handler: handlers.importProductsFile
+    events:
+      - http:
+          path: import
+          method: get
+          request:
+            parameters:
+              querystrings:
+                name: true
+  importFileParser:
+    handler: handlers.importFileParser
+    events:
+      - s3:
+          bucket: ${env:BUCKET}
+          event: s3:ObjectCreated:* # * : all types allowed: put and post
+          rules:
+            - prefix: uploaded/
+          existing: true
